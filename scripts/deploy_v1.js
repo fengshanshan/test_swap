@@ -1,4 +1,4 @@
-const { ethers, upgrades } = require("hardhat");
+const { ethers} = require("hardhat");
 
 // async function main() {
 //     const Box = await ethers.getContractFactory("Box");
@@ -11,24 +11,17 @@ const { ethers, upgrades } = require("hardhat");
 // }
 
 async function main() {
-    const tokenContract = await ethers.getContractFactory("MyToken");
-    //const tokenContract2 = await ethers.getContractFactory("MyToken");
-    token1 = await tokenContract.deploy("mPUNDIX", "PUX");
-    token2 = await tokenContract.deploy("mPURSE", "PUR");
+    //const MemoriesContract = await ethers.getContractFactory("MemoriesERC20");
+    const TreasuryContract = await ethers.getContractFactory("TimeTreasury");
+    const TimeContract = await ethers.getContractFactory("TimeERC20Token");
 
-    const Swap = await ethers.getContractFactory("TokenSwap");
-    console.log("Deploying Swap...");
 
-    console.log("Deploying token1...", token1.address);
-    console.log("Deploying token2...", token2.address);
+    //memories = await MemoriesContract.deploy();
+    times = await TimeContract.deploy();
+    treasury = await TreasuryContract.deploy(times.address, "0x95b58a6bff3d14b7db2f5cb5f0ad413dc2940658", 3000, 26);
 
-    const tokenSwap = await upgrades.deployProxy(Swap, [token1.address, token2.address, 1], {
-        initializer: "initialize",
-    });
-
-    await tokenSwap.deployed();
-    console.log("tokenSwap deployed to:", tokenSwap.address);
-
+    console.log(times.address)
+    console.log(treasury.address)
 }
 
 main();
